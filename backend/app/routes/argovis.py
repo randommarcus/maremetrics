@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Query
 
 from app.models.profile import ProfileSummary
 from app.services.argovis_service import argovis_service
@@ -14,16 +14,24 @@ router = APIRouter(
     "/profiles",
     response_model=list[ProfileSummary]
 )
-async def get_profiles():
-
-    polygon = (
-        "[[-30,30],[-20,30],"
-        "[-20,40],[-30,40],[-30,30]]"
+async def get_profiles(
+    start_date: str = Query(
+        ...,
+        description="Start date in ISO format"
+    ),
+    end_date: str = Query(
+        ...,
+        description="End date in ISO format"
+    ),
+    polygon: str = Query(
+        ...,
+        description="Polygon coordinates"
     )
+):
 
     profiles = await argovis_service.get_profiles(
-        start_date="2025-01-01T00:00:00Z",
-        end_date="2025-01-02T00:00:00Z",
+        start_date=start_date,
+        end_date=end_date,
         polygon=polygon
     )
 
