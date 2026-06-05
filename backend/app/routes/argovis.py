@@ -1,8 +1,8 @@
 from fastapi import APIRouter
 
-from app.services.argovis_service import (
-    argovis_service
-)
+from app.models.profile import ProfileSummary
+from app.services.argovis_service import argovis_service
+from app.services.profile_transformer import transform_profiles
 
 router = APIRouter(
     prefix="/api/argo",
@@ -10,7 +10,10 @@ router = APIRouter(
 )
 
 
-@router.get("/profiles")
+@router.get(
+    "/profiles",
+    response_model=list[ProfileSummary]
+)
 async def get_profiles():
 
     polygon = (
@@ -24,4 +27,4 @@ async def get_profiles():
         polygon=polygon
     )
 
-    return profiles
+    return transform_profiles(profiles)
