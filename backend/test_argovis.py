@@ -1,4 +1,5 @@
 import asyncio
+import json
 
 from app.services.argovis_service import (
     argovis_service
@@ -19,6 +20,7 @@ async def main():
     )
 
     print(f"Profiles Returned: {len(profiles)}")
+    print(json.dumps(profiles[0], indent=2))
 
 
 asyncio.run(main())
